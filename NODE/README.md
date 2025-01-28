@@ -10,6 +10,7 @@
     NODE_PORT=5000
     API_PREFIX=/api/v1/
     JWT_SECRET=your_jwt_secret
+    JWT_EXPIRES_IN=7d
    ```
 4. Start the server using `npm start`.
 

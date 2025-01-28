@@ -13,6 +13,7 @@ The API endpoints are accessible at `/api/v1`.
 ## Features
 1. **User Authentication**
    - Login functionality with email and password.
+   - JWT-based authentication.
 2. **Book Management**
    - Search books by title, author, Description.
    - Add new books with details like title, author, genre, and description.
@@ -39,6 +40,7 @@ Response:
   "status": true,
   "msg": "success",
   "data": {
+    "token": "<JWT_TOKEN>",
     "UserData": {
       "id": 1,
       "userID": "***",
@@ -65,6 +67,7 @@ Response:
 }
 ```
 
+### Need authentication token for below. 
 ### Get All Books
 **GET** `/api/v1/books/?search=<query>`
 Response:
@@ -118,6 +121,7 @@ Response:
 - **Framework**: Node.js with Express.
 - **Database**: MySQL with a relational schema.
 - **ORM**: Raw SQL queries for efficiency.
+- **Authentication**: JWT for secure login sessions.
 - **Deployment**: Hosted at [https://api.secretroom.in/](https://api.secretroom.in/).
 
 ### Key Components
@@ -194,6 +198,7 @@ This is a full-stack application for managing books and their related data. The 
     NODE_PORT=5000
     API_PREFIX=/api/v1/
     JWT_SECRET=your_jwt_secret
+    JWT_EXPIRES_IN=7d <your_token_time>
    ```
 4. Start the server using `npm start`.
 
