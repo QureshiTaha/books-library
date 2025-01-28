@@ -27,7 +27,7 @@ router.route('/getUserByPhone/:userPhone').get(getUserByUserPhoneController);
 router.route('/edituser').post(editUserController);
 router.route('/wishlist/:userID').get(verifyToken, getWishlistByuserIDController);
 router.route('/wishlist').post(verifyToken, addToWishlistController);
-router.route('/wishlist').delete(verifyToken, removeFromWishlistController);
+router.route('/wishlist/:userID/:bookID').delete(verifyToken, removeFromWishlistController);
 router.route('/test').get(testingController);
 
 module.exports = router;

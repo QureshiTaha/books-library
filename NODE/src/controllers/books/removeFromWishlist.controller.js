@@ -2,7 +2,7 @@ const booksUseCase = require('./booksUseCase');
 module.exports = (dependencies) => {
   return async (req, res, next) => {
     try {
-      const { userID, bookID } = req.body;
+      const { userID, bookID } = req.params;
       const wishlist = await booksUseCase.removeFromWishlist(userID, bookID);
 
       res.status(200).send({ status: true, msg: 'success', data: wishlist });

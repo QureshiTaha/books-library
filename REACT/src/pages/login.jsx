@@ -26,13 +26,13 @@ function Login() {
           }
         });
       const { data, status } = response.data;
-      const { UserData } = data;
+      const { UserData, token } = data;
 
-      if (status) {
+      if (status && token) {
         // Save token in localStorage
         localStorage.setItem("isLoggedIn", true);
+        localStorage.setItem("token", token);
         localStorage.setItem("UserData", JSON.stringify(UserData)); // Optionally save user data
-        console.log("Login successful");
         navigate("/");
       } else {
         setErrorMessage("Login failed, please check your credentials.");
