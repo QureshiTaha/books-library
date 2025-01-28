@@ -17,7 +17,12 @@ function HomeBody() {
   const fetchBooks = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_SLUG}/books/?search=${search}`
+        `${process.env.REACT_APP_API_SLUG}/books/?search=${search}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
       setBooks(response.data.data);
     } catch (error) {
@@ -29,7 +34,12 @@ function HomeBody() {
     const fetch = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_SLUG}/books/?search=${search}`
+          `${process.env.REACT_APP_API_SLUG}/books/?search=${search}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
         );
         setBooks(response.data.data);
       } catch (error) {
@@ -43,7 +53,11 @@ function HomeBody() {
   const handleAddBook = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${process.env.REACT_APP_API_SLUG}/books/`, newBook);
+      await axios.post(`${process.env.REACT_APP_API_SLUG}/books/`, newBook, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       setNewBook({
         title: "",
         author: "",
@@ -149,7 +163,18 @@ function HomeBody() {
             onClick={() => navigate(`/book/${book.bookID}`)}
           >
             <h2 className="text-lg font-bold">{book.title}</h2>
-            <h4 className="text-lg font-bold">Rating {book.rating}</h4>
+            <h4 className="text-lg font-bold">
+              Rating{" "}
+              <strong>
+                {book.reviews && book.reviews.length && book.reviews.length > 0
+                  ? Math.round(
+                      (book.reviews.reduce((a, b) => a + b.rating, 0) /
+                        book.reviews.length) *
+                        10
+                    ) / 10
+                  : 0}
+              </strong>
+            </h4>
             <p>
               <strong>Author:</strong> {book.author}
             </p>

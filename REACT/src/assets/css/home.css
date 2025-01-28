@@ -111,6 +111,9 @@ form button:hover {
   cursor: pointer;
 }
 
+.pointer-none {
+  cursor: unset !important;
+}
 .home {
   background-color: #0c3d2a;
   padding: 0px;

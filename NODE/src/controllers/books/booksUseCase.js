@@ -30,7 +30,6 @@ module.exports = {
         [`%${search}%`, `%${search}%`, `%${search}%`, offset, limit]
       );
 
-      console.log('getAllBooks:', getAllBooks);
       return getAllBooks;
     } catch (error) {
       console.error('Error fetching books:', error);
@@ -230,6 +229,77 @@ module.exports = {
       return book;
     } catch (error) {
       console.error('Error fetching book by ID:', error);
+      throw error;
+    }
+  },
+  getWishlistByUserID: async function (userID) {
+    if (!userID) throw new Error('Invalid user ID');
+    try {
+      const wishlist = await sqlQuery(` 
+   SELECT 
+    b.bookID,
+    b.title AS bookTitle,
+    b.author,
+    b.genre,
+    b.publishDate,
+    b.description,
+    b.coverImage,
+    b.rating AS bookRating
+FROM 
+    db_books AS b
+INNER JOIN 
+    db_wishlist AS w 
+    ON b.bookID = w.bookID
+WHERE 
+    w.userID = '${userID}'
+ORDER BY 
+    b.title ASC;
+`);
+
+      console.log('wishlist:', wishlist);
+      return wishlist;
+    } catch (error) {
+      console.error('Error fetching wishlist:', error);
+      throw error;
+    }
+  },
+  addToWishlist: async function (userID, bookID) {
+    if (!userID || !bookID) throw new Error('Invalid user or book ID');
+    try {
+      // chck is already added
+      const checkBookInWishlist = await sqlQuery(
+        `SELECT * FROM db_wishlist WHERE userID = '${userID}' AND bookID = '${bookID}';`
+      );
+
+      if (checkBookInWishlist.length > 0) {
+        return { err: 'Book already in wishlist' };
+      }
+      const addBookToWishlist = await sqlQuery(
+        `INSERT INTO db_wishlist (
+          userID,
+          bookID
+          ) VALUES (
+          '${userID}',
+          '${bookID}'
+          );`
+      );
+
+      return addBookToWishlist;
+    } catch (error) {
+      console.error('Error adding book to wishlist:', error);
+      throw error;
+    }
+  },
+  removeFromWishlist: async function (userID, bookID) {
+    if (!userID || !bookID) throw new Error('Invalid user or book ID');
+    try {
+      const removeBookFromWishlist = await sqlQuery(
+        `DELETE FROM db_wishlist WHERE userID = '${userID}' AND bookID = '${bookID}';`
+      );
+
+      return removeBookFromWishlist;
+    } catch (error) {
+      console.error('Error removing book from wishlist:', error);
       throw error;
     }
   }

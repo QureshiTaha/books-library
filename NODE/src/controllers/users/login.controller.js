@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt")
 const database = require("../../Modules/config")
 const sql = require("../../Modules/sqlHandler");
+const jwt = require('jsonwebtoken');
 const sqlQuery = sql.query;
 
 module.exports = (dependencies) => {
@@ -50,8 +51,11 @@ module.exports = (dependencies) => {
                         .catch(reject);
                     });
                 }                                    
-
                 await getData();
+                const token = jwt.sign({ id: dataStore.UserData.userID }, process.env.JWT_SECRET, {
+                  expiresIn: process.env.JWT_EXPIRES_IN,
+                });
+                dataStore.token = token;
                 res.send({ "status": true, "msg": 'success', data: dataStore });
             }
         } catch (error) {
